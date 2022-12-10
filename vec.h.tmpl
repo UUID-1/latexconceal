@@ -1,0 +1,27 @@
+/*  unitex: TeX-to-Unicode converter.
+ *  Copyright (C) 2022 Juiyung Hsu
+ *  License: GNU General Public License (version 3 or later)
+ *  You should have received a copy of the license along with this
+ *  file. If not, see <http://www.gnu.org/licenses>.
+ */
+
+typedef struct {
+	VEC_T *raw;
+	size_t size;
+	size_t capacity;
+} VEC_STRUCT;
+
+VEC_STRUCT *VEC_new(void);
+void VEC_delete(VEC_STRUCT *V);
+VEC_T *VEC_to_block(VEC_STRUCT *V);
+size_t VEC_size(const VEC_STRUCT *V);
+void VEC_reserve(VEC_STRUCT *V, size_t n);
+void VEC_resize(VEC_STRUCT *V, size_t newsize);
+void VEC_push(VEC_STRUCT *V, VEC_T e);
+VEC_T VEC_pop(VEC_STRUCT *V);
+VEC_T VEC_top(VEC_STRUCT *V);
+VEC_T VEC_get(const VEC_STRUCT *V, size_t i);
+VEC_T *VEC_getptr(const VEC_STRUCT *V, size_t i);
+VEC_T VEC_set(VEC_STRUCT *V, size_t i, VEC_T e);
+void VEC_insert(VEC_STRUCT *V, size_t i, VEC_T e);
+void VEC_erasen(VEC_STRUCT *V, size_t i, size_t n);

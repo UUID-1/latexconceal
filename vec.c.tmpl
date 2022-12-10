@@ -1,0 +1,109 @@
+/*  unitex: TeX-to-Unicode converter.
+ *  Copyright (C) 2022 Juiyung Hsu
+ *  License: GNU General Public License (version 3 or later)
+ *  You should have received a copy of the license along with this
+ *  file. If not, see <http://www.gnu.org/licenses>.
+ */
+
+VEC_STRUCT *
+VEC_new(void)
+{
+	VEC_STRUCT *ret = xmalloc(sizeof(*ret));
+	*ret = (VEC_STRUCT){ .raw = NULL, .size = 0, .capacity = 0 };
+	return ret;
+}
+
+void
+VEC_delete(VEC_STRUCT *V)
+{
+	free(V->raw);
+	free(V);
+}
+
+VEC_T *
+VEC_to_block(VEC_STRUCT *V)
+{
+	VEC_T *ret = xreallocarray(V->raw, V->size, sizeof(VEC_T));
+	free(V);
+	return ret;
+}
+
+size_t
+VEC_size(const VEC_STRUCT *V)
+{
+	return V->size;
+}
+
+void
+VEC_reserve(VEC_STRUCT *V, size_t n)
+{
+	if (n > V->capacity) {
+		V->raw = xreallocarray(V->raw, n, sizeof(VEC_T));
+		V->capacity = n;
+	}
+}
+
+void
+VEC_resize(VEC_STRUCT *V, size_t newsize)
+{
+	VEC_reserve(V, newsize + newsize / 2);
+	V->size = newsize;
+}
+
+void
+VEC_push(VEC_STRUCT *V, VEC_T e)
+{
+	if (V->size < V->capacity) {
+		V->raw[V->size++] = e;
+	} else {
+		size_t i = V->size;
+		VEC_resize(V, i + 1);
+		V->raw[i] = e;
+	}
+}
+
+VEC_T
+VEC_pop(VEC_STRUCT *V)
+{
+	return V->raw[--V->size];
+}
+
+VEC_T
+VEC_top(VEC_STRUCT *V)
+{
+	return V->raw[V->size - 1];
+}
+
+VEC_T
+VEC_get(const VEC_STRUCT *V, size_t i)
+{
+	return V->raw[i];
+}
+
+VEC_T *
+VEC_getptr(const VEC_STRUCT *V, size_t i)
+{
+	return V->raw + i;
+}
+
+VEC_T
+VEC_set(VEC_STRUCT *V, size_t i, VEC_T e)
+{
+	V->raw[i] = e;
+	return e;
+}
+
+void
+VEC_insert(VEC_STRUCT *V, size_t i, VEC_T e)
+{
+	VEC_resize(V, V->size + 1);
+	memmove(V->raw + i + 1, V->raw + i, (V->size - i - 1) * sizeof(VEC_T));
+	V->raw[i] = e;
+}
+
+void
+VEC_erasen(VEC_STRUCT *V, size_t i, size_t n)
+{
+	memmove(V->raw + i, V->raw + i + n, (V->size - i - n) * sizeof(VEC_T));
+	V->size -= n;
+}
