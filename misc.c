@@ -54,7 +54,7 @@ readtk(Charv *cv, FILE *f)
 	int c;
 
 	while (isblank(c = getc(f)))
-		cv_push(cv, c);
+		cv_push(cv, tr(c));
 
 	ret = cv_size(cv);
 

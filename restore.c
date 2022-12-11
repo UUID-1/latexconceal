@@ -94,12 +94,12 @@ getrestoredtk(const Strmap *invbr, Charv *cv, Idxv *iv, Idxv *ib, FILE *f, bool 
 	iv_erasen(iv, iifirst, iilast - iifirst);
 
 	p = nd->key;
-	while (isblank(*p)) cv_push(cv, *p++);
+	while (isblank(tr(*p))) cv_push(cv, *p++);
 	iv_push(iv, ret = cv_size(cv));
 	for (;;) {
 		do cv_push(cv, *p); while (*p++ != NUL);
 		if (*p == NUL) break;
-		while (isblank(*p)) cv_push(cv, *p++);
+		while (isblank(tr(*p))) cv_push(cv, *p++);
 		iv_push(iv, cv_size(cv));
 	}
 
@@ -181,10 +181,10 @@ getrestoredline(const Strmap *invbr, Charv *cv, Idxv *iv, Idxv *ib, FILE *f)
 			if (c == tr('\n') || c == EOFBYTE)
 				return;
 		} else if (cv_get(cv, i = iv_top(iv)) == tr('\\')
-		           && isalpha(cv_get(cv, i + 1))
-		           && isalpha(cv_get(cv, i = peektk(cv, ib, f)))
+		           && isalpha(tr(cv_get(cv, i + 1)))
+		           && isalpha(tr(cv_get(cv, i = peektk(cv, ib, f))))
 		           && cv_get(cv, i - 1) == NUL) {
-			cv_push(cv, ' ');
+			cv_push(cv, tr(' '));
 			iv_set(ib, iv_size(ib) - 1, cv_size(cv));
 			do {
 				cv_push(cv, c = cv_get(cv, i++));
@@ -251,10 +251,10 @@ getrestoredline(const Strmap *invbr, Charv *cv, Idxv *iv, Idxv *ib, FILE *f)
 				} while (++kk <= jj);
 
 				if (cv_top(cv) == NUL
-				    && isalpha(tr(cv_get(cv, iv_get(iv, ii))))
+				    && isalpha(tr(cv_get(cv, iv_get(iv, jj))))
 				    && cv_get(cv, i = iv_get(iv, ii - 1)) == tr('\\')
 				    && isalpha(tr(cv_get(cv, i + 1))))
-					cv_push(cv, ' ');
+					cv_push(cv, tr(' '));
 
 				if (cv_top(cv) != NUL) {
 					i = iv_get(iv, jj);

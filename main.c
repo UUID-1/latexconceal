@@ -114,7 +114,7 @@ puttks(const char *const *tks, const CChar *cchars)
 		if (s[-1] != NUL) {
 			for (t = s - 1; t[-1] != NUL; --t);
 			do {
-				if (putchar(*t++) == EOF)
+				if (putchar(tr(*t++)) == EOF)
 					return EOF;
 			} while (t != s);
 		}
@@ -271,14 +271,22 @@ main(int argc, char **argv)
 			}
 
 			do {
-				int leadingchar;
+				bool doconceal;
 				const char **tks;
 				size_t ntks, j;
 				CChar *cchars;
 
-				leadingchar = getc(f);
-				if (leadingchar != '\x03')
-					ungetc(leadingchar, f);
+				if (reverse) {
+					doconceal = false;
+				} else {
+					char c = getc(f);
+					if (c == '\x03') {
+						doconceal = false;
+					} else {
+						ungetc(c, f);
+						doconceal = true;
+					}
+				}
 
 				getrestoredline(invbr, cv, iv, ib, f);
 				if (ferror(f))
@@ -291,7 +299,7 @@ main(int argc, char **argv)
 				for (j = ntks; j--; )
 					tks[j] = cv_getptr(cv, iv_get(iv, j));
 
-				if (!reverse && leadingchar != '\x03')
+				if (doconceal)
 					cchars = conceal(rtbr, subsbr, supsbr, test_rtbr_initial, (const char**)tks, ntks);
 				else
 					cchars = NULL;

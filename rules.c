@@ -95,7 +95,7 @@ getrules(const Strv *files)
 				if (c == '\t') break;
 				if (c == ' ') {
 					do {
-						cv_push(cv, c);
+						cv_push(cv, tr(c));
 						c = getc(f);
 					} while (c == ' ');
 					if (c == '\t') {
