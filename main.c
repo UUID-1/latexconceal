@@ -215,13 +215,13 @@ main(int argc, char **argv)
 			case 'h':
 			default:
 				hf = (opt == 'h'? stdout: stderr);
-				fprintf(hf, "usage: %s [-r|-h] [-u rules_file]... [-f rules_file]... [input_files...]\n", argv[0]);
+				fprintf(hf, "usage: %s [-r|-h|-v] [-u rules_file]... [-f rules_file]... [input_files...]\n", argv[0]);
 				fputs("options:\n"
 				      "  -r         convert in reverse\n"
 				      "  -u <file>  specify the rules file to use\n"
 				      "  -f <file>  specify an additional rules file\n"
-				      "  -v         print version number and exit\n"
-				      "  -h         print this help and exit\n", hf);
+				      "  -h         print this help and exit\n"
+				      "  -v         print version number and exit\n", hf);
 				return opt != 'h';
 			}
 		}

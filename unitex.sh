@@ -7,7 +7,7 @@ rulesfilter=''
 styfile=''
 sedscript=''
 
-default_rulesfile="${UNITEX_RULES_FILE:-${XDG_CONFIG_HOME:-${HOME}/.config}/unitex/rules.tsv}"
+default_rulesfile="${UNITEX_RULES_FILE:-${XDG_CONFIG_HOME:-~/.config}/unitex/rules.tsv}"
 
 if test -e "${default_rulesfile}" ; then
 	rulesfiles="'${default_rulesfile}'"
